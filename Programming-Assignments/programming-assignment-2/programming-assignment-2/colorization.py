@@ -78,7 +78,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Train colorization")
     parser.add_argument('--ngpu', default=0, help="number of GPUs for training")
     parser.add_argument('--colors', default='colors/color_kmeans24_cat7.npy', help="Discrete color clusters to use")
-    parser.add_argument('--model', choices=["PoolUpsampleNet", "ConvTransposeNet", "UNet"], help="Model to run")
+    parser.add_argument('--model', default="PoolUpsampleNet", choices=["PoolUpsampleNet", "ConvTransposeNet", "UNet"], help="Model to run")
     parser.add_argument('--kernel', default=3, type=int, help="Convolution kernel size")
     parser.add_argument('--num_filters', default=32, type=int, help="Base number of convolution filters")
     parser.add_argument('--learn_rate', default=0.001, type=float, help="Learning rate")
