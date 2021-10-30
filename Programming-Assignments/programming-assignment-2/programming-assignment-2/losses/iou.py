@@ -20,5 +20,10 @@ class SoftIoU(nn.Module):
         # - compute union between foreground and gt
         # - compute loss using the computed intersection and union
         ######################################################
-        loss = 0
+        softmax_pred = nn.functional.softmax(pred, dim=1)
+        foreground = softmaxed_pred[:, 1, :, :])
+        
+        intersection = foreground*gt
+        (union = foreground + gt - intersection) + self.SMOOTH
+        loss = 1 - intersection.sum()/union.sum()
         return loss

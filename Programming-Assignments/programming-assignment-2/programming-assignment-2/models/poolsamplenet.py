@@ -40,10 +40,10 @@ class PoolUpsampleNet(nn.Module):
 
     def forward(self, x):
         ############### YOUR CODE GOES HERE ###############
-        ###################################################
         out = self.module1(x)
         out = self.module2(out)
         out = self.module3(out)
         out = self.module4(out)
         out = self.module_last(out)
         return out
+        ###################################################
