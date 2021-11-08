@@ -16,7 +16,11 @@ class AdditiveAttention(nn.Module):
         # FILL THIS IN - START
         # ------------
 
-        # self.attention_network = ...
+        self.attention_network = nn.Sequential(
+            nn.Linear(hidden_size * 2, hidden_size), #hidden_size*2 --> hidden_size
+            nn.ReLU(),
+            nn.Linear(hidden_size, 1) #hidden_size --> 1
+        )
 
         # ------------
         # FILL THIS IN - END
@@ -44,11 +48,11 @@ class AdditiveAttention(nn.Module):
         # FILL THIS IN - START
         # ------------
 
-        # expanded_queries = ...
-        # concat_inputs = ...
-        # unnormalized_attention = self.attention_network(...)
-        # attention_weights = self.softmax(...)
-        # context = ...
+        expanded_queries = queries.view(keys.size(0), -1, self.hidden_size).expand_as(keys)
+        concat_inputs =  torch.cat((expanded_queries, keys), 2)
+        unnormalized_attention = self.attention_network(concat_inputs)
+        attention_weights = self.softmax(unnormalized_attention)
+        context = torch.bmm(attention_weights.transpose(2, 1), values)
 
         # ------------
         # FILL THIS IN - END
@@ -88,18 +92,26 @@ class ScaledDotAttention(nn.Module):
         # FILL THIS IN - START
         # ------------
 
-        # if queries.dim() != 3:
-        #     queries = ...
-        # q = ...
-        # k = ...
-        # v = ...
-        # unnormalized_attention = ...
-        # attention_weights = ...
-        # context = ...
+        if queries.dim() != 3:
+            queries = self.Q(queries.unsqueeze(1))
+
+        q = self.Q(queries)
+        k = self.K(keys)
+        v = self.V(values)
+        unnormalized_attention = k.bmm(q.permute(0, 2, 1)) * self.scaling_factor
+        attention_weights = self.softmax(unnormalized_attention.permute(0, 2, 1))
+        context = torch.bmm(attention_weights, v)
+
+        # unnormalized_attention = self.scaling_factor * torch.bmm(k, q.transpose(1, 2))
+        # attention_weights = self.softmax(unnormalized_attention)
+        # context = torch.bmm(attention_weights.transpose(1, 2), v)
 
         # ------------
         # FILL THIS IN - END
         # ------------
+
+
+
         return context, attention_weights.transpose(1,2)
 
 class CausalScaledDotAttention(nn.Module):
@@ -135,16 +147,20 @@ class CausalScaledDotAttention(nn.Module):
         # ------------
         # You are free to follow the code template below, or do it a different way,
         # as long as the output is correct.
+        batch_size, seq_len, hidden_size = keys.size()
 
-        # if queries.dim() != 3:
-        #     queries = ...
-        # q = ...
-        # k = ...
-        # v = ...
-        # unnormalized_attention = ....
-        # mask = ...
-        # attention_weights = ...
-        # context = ...
+
+        if queries.dim() != 3:
+            queries = self.Q(queries.unsqueeze(1))
+
+        q = self.Q(queries)
+        k = self.K(keys)
+        v = self.V(values)
+        unnormalized_attention = self.scaling_factor * torch.bmm(k, q.transpose(1, 2))
+        mask = torch.tril(torch.ones(batch_size, seq_len, seq_len, dtype=torch.uint8)).transpose(1, 2)
+        unnormalized_attention[mask == 0] = self.neg_inf
+        attention_weights = self.softmax(unnormalized_attention)
+        context = torch.bmm(attention_weights.transpose(1, 2), v)
 
         # ------------
         # FILL THIS IN - END

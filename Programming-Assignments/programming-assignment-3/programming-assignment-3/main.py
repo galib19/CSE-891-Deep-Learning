@@ -5,6 +5,7 @@ import argparse
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
+import os
 
 from seq2seq import Seq2Seq
 from dataloader import PigLatinData
@@ -13,12 +14,12 @@ if __name__ == '__main__':
     # parse the arguments
     parser = argparse.ArgumentParser(description="Train Seq2Seq")
     parser.add_argument('--ngpu', default=0, help="number of GPUs for training")
-    parser.add_argument('--data_file', choices=["data/pig_latin_small.txt", "data/pig_latin_large.txt"], help="dataset to run")
-    parser.add_argument('--encoder', choices=["GRUEncoder", "TransformerEncoder"], help="encoder to run")
-    parser.add_argument('--decoder', choices=["GRUDecoder", "GRUAttentionDecoder", "TransformerDecoder"], help="decoder to run")
+    parser.add_argument('--data_file', default="data/pig_latin_small.txt", choices=["data/pig_latin_small.txt", "data/pig_latin_large.txt"], help="dataset to run")
+    parser.add_argument('--encoder', default = "TransformerEncoder",  choices=["GRUEncoder", "TransformerEncoder"], help="encoder to run")
+    parser.add_argument('--decoder', default = "TransformerDecoder", choices=["GRUDecoder", "GRUAttentionDecoder", "TransformerDecoder"], help="decoder to run")
     parser.add_argument('--hidden_size', default=32, type=int, help="hidden size")
     parser.add_argument('--num_layers', default=3, type=int, help="number of transformer layers")
-    parser.add_argument('--attention_type', choices=["AdditiveAttention", "ScaledDotAttention"], help="attention type")
+    parser.add_argument('--attention_type', default="ScaledDotAttention", choices=["AdditiveAttention", "ScaledDotAttention"], help="attention type")
     parser.add_argument('--learn_rate', default=5e-4, type=float, help="Learning rate")
     parser.add_argument('--lr_decay', default=0.99, type=float, help="learning rate decay")
     parser.add_argument('--batch_size', default=64, type=int, help="Batch size")
@@ -85,6 +86,9 @@ if __name__ == '__main__':
     TEST_SENTENCES = [
         'the air conditioning is working',
         'the quick brown fox',
+        'deep learning is fun and mysterious',
+        'shining like the sun',
+        'breaking bad is a good one'
         ]
     for sentence in TEST_SENTENCES:
         translated = model.translate_sentence(sentence)
@@ -92,7 +96,7 @@ if __name__ == '__main__':
 
     # visualize_attention_maps
     TEST_WORDS = [
-        'street',
+        'street', 'fake', 'good', 'brink', 'aardvark', 'long-term', 'encoder-decoder',  'madam', 'pull-up', 'aha'
     ]
     for word in TEST_WORDS:
         model.translate(word, visualize_attention=True)

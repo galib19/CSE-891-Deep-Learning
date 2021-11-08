@@ -14,9 +14,9 @@ class GRUAttentionDecoder(nn.Module):
         self.embedding = nn.Embedding(vocab_size, hidden_size)
 
         self.gru = MyGRUCell(input_size=hidden_size*2, hidden_size=hidden_size)
-        if attention_type == 'additive':
+        if attention_type == 'AdditiveAttention':
           self.attention = AdditiveAttention(hidden_size=hidden_size)
-        elif attention_type == 'scaled_dot':
+        elif attention_type == 'ScaledDotAttention':
           self.attention = ScaledDotAttention(hidden_size=hidden_size)
 
         self.out = nn.Linear(hidden_size, vocab_size)
@@ -50,10 +50,11 @@ class GRUAttentionDecoder(nn.Module):
             # FILL THIS IN - START
             # ------------
 
-            # embed_current = ...  # Get the current time step, across the whole batch
-            # context, attention_weights = self.attention(...)  # batch_size x 1 x hidden_size
-            # embed_and_context = ....  # batch_size x (2*hidden_size)
-            # h_prev = self.rnn(...)  # batch_size x hidden_size
+            embed_current = embed[:, i, :]     # Get the current time step, across the whole batch
+            context, attention_weights = self.attention(h_prev, annotations, annotations)   # batch_size x 1 x hidden_size
+            embed_and_context = torch.cat([embed_current, torch.squeeze(context, dim=1)], dim=1)  # batch_size x (2*hidden_size)
+            h_prev = self.gru(embed_and_context, h_prev)     # batch_size x hidden_size
+
 
             # ------------
             # FILL THIS IN - END

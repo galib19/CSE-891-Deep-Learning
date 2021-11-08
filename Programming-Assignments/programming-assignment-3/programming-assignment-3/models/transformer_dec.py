@@ -4,6 +4,18 @@ import torch
 import torch.nn as nn
 from .attention import *
 
+class LayerNorm(nn.Module):
+    def __init__(self, features, eps=1e-6):
+        super(LayerNorm, self).__init__()
+        self.a_2 = nn.Parameter(torch.ones(features))
+        self.b_2 = nn.Parameter(torch.zeros(features))
+        self.eps = eps
+
+    def forward(self, x):
+        mean = x.mean(-1, keepdim=True)
+        std = x.std(-1, keepdim=True)
+        return self.a_2 * (x - mean) / (std + self.eps) + self.b_2
+
 class TransformerDecoder(nn.Module):
     def __init__(self, vocab_size, hidden_size, num_layers, attention_type=None):
         super(TransformerDecoder, self).__init__()
@@ -13,7 +25,7 @@ class TransformerDecoder(nn.Module):
         self.embedding = nn.Embedding(vocab_size, hidden_size)
         self.num_layers = num_layers
 
-        self.self_attentions = nn.ModuleList([CausalScaledDotAttention(
+        self.self_attentions = nn.ModuleList([ScaledDotAttention(
                                     hidden_size=hidden_size,
                                  ) for i in range(self.num_layers)])
         self.encoder_attentions = nn.ModuleList([ScaledDotAttention(
@@ -27,6 +39,8 @@ class TransformerDecoder(nn.Module):
         self.out = nn.Linear(hidden_size, vocab_size)
 
         self.positional_encodings = self.create_positional_encodings()
+
+        self.norm = LayerNorm(hidden_size)
 
     def forward(self, inputs, annotations, hidden_init):
         """Forward pass of the attention-based decoder RNN.
@@ -52,12 +66,15 @@ class TransformerDecoder(nn.Module):
           # ------------
           # FILL THIS IN - START
           # ------------
-            # new_contexts, self_attention_weights = # batch_size x seq_len x hidden_size
-            # residual_contexts =
-            # new_contexts, encoder_attention_weights = # batch_size x seq_len x hidden_size
-            # residual_contexts =
-            # new_contexts =
-            # contexts =
+          new_contexts, self_attention_weights = self.self_attentions[i](contexts, contexts, contexts)
+          residual_contexts = contexts + new_contexts
+          residual_contexts = self.norm(residual_contexts)
+          new_contexts, encoder_attention_weights = self.encoder_attentions[i](residual_contexts, annotations, annotations)
+          residual_contexts = residual_contexts + new_contexts
+          residual_contexts = self.norm(residual_contexts)
+          new_contexts = self.attention_mlps[i](residual_contexts.view(-1, self.hidden_size)).view(batch_size, seq_len, self.hidden_size)
+          contexts = residual_contexts + new_contexts
+          contexts = self.norm(contexts)
           # ------------
           # FILL THIS IN - END
           # ------------

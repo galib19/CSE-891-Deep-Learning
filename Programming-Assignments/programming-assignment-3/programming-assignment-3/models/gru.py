@@ -16,15 +16,17 @@ class MyGRUCell(nn.Module):
         # FILL THIS IN - START
         # ------------
 
-        # self.Wr = nn.Linear(...)
-        # ...
-        # ...
-        # ...
+        self.Wir = nn.Linear(input_size, hidden_size)
+        self.Wiz = nn.Linear(input_size, hidden_size)
+        self.Wig = nn.Linear(input_size, hidden_size)
+
+        self.Whr = nn.Linear(hidden_size, hidden_size)
+        self.Whz = nn.Linear(hidden_size, hidden_size)
+        self.Whg = nn.Linear(hidden_size, hidden_size)
 
         # ------------
         # FILL THIS IN - END
         # ------------
-
 
     def forward(self, x, h_prev):
         """Forward pass of the GRU computation for one time step.
@@ -41,10 +43,10 @@ class MyGRUCell(nn.Module):
         # FILL THIS IN - START
         # ------------
 
-        # z = ...
-        # r = ...
-        # g = ...
-        # h_new = ...
+        z = torch.sigmoid(self.Wiz(x) + self.Whz(h_prev))
+        r = torch.sigmoid(self.Wir(x) + self.Whr(h_prev))
+        g = torch.tanh(self.Wig(x) + r * self.Whg(h_prev))
+        h_new = (1-z)*g + z*h_prev
 
         # ------------
         # FILL THIS IN - END

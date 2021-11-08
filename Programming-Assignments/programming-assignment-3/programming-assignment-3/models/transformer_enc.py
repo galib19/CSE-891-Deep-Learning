@@ -4,6 +4,18 @@ import torch
 import torch.nn as nn
 from .attention import *
 
+class LayerNorm(nn.Module):
+    def __init__(self, features, eps=1e-6):
+        super(LayerNorm, self).__init__()
+        self.a_2 = nn.Parameter(torch.ones(features))
+        self.b_2 = nn.Parameter(torch.zeros(features))
+        self.eps = eps
+
+    def forward(self, x):
+        mean = x.mean(-1, keepdim=True)
+        std = x.std(-1, keepdim=True)
+        return self.a_2 * (x - mean) / (std + self.eps) + self.b_2
+
 class TransformerEncoder(nn.Module):
     def __init__(self, vocab_size, hidden_size, num_layers, attention_type=None):
         super(TransformerEncoder, self).__init__()
@@ -25,6 +37,8 @@ class TransformerEncoder(nn.Module):
                                  ) for i in range(self.num_layers)])
 
         self.positional_encodings = self.create_positional_encodings()
+        self.norm = LayerNorm(hidden_size)
+
 
     def forward(self, inputs):
         """Forward pass of the encoder RNN.
@@ -44,7 +58,8 @@ class TransformerEncoder(nn.Module):
         # FILL THIS IN - START
         # ------------
         # Add positional embeddings from self.create_positional_encodings. (a'la https://arxiv.org/pdf/1706.03762.pdf, section 3.5)
-        # encoded = ...
+        encoded = self.embedding(inputs)  # batch_size x seq_len x hidden_size
+        encoded += self.positional_encodings[:seq_len]
         # ------------
         # FILL THIS IN - END
         # ------------
@@ -55,13 +70,15 @@ class TransformerEncoder(nn.Module):
             # ------------
             # FILL THIS IN - START
             # ------------
-            # new_annotations, self_attention_weights =  # batch_size x seq_len x hidden_size
-            # residual_annotations =
-            # new_annotations =
-            # annotations =
+            new_annotations, self_attention_weights = self.self_attentions[i](annotations, annotations, annotations)
+            residual_annotations = annotations + new_annotations
+            new_annotations = self.attention_mlps[i](residual_annotations.view(-1, self.hidden_size)).view(batch_size, seq_len, self.hidden_size)
+            annotations = residual_annotations + new_annotations
+            annotations = self.norm(annotations)
             # ------------
             # FILL THIS IN - END
             # ------------
+            pass
 
         # Transformer encoder does not have a last hidden layer.
         return annotations, None
