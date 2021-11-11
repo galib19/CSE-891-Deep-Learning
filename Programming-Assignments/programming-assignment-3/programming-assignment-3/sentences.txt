@@ -1,0 +1,167 @@
+GRU
+
+Small 
+
+source:		the air conditioning is working 
+translated:	eray andedway ontionssay iway ontingsway
+
+source:		the quick brown fox 
+translated:	eray ingdersay-ingway ondway ondgedsway
+
+source:		deep learning is fun and mysterious 
+translated:	eessay earingseday iway unedway andway ursestrationgray
+
+source:		shining like the sun 
+translated:	ingsay-ableway iestray eray uneday
+
+source:		breaking bad is a good one 
+translated:	eationsay andway iway ayway oodgay oneway
+
+
+Big
+
+source:		the air conditioning is working 
+translated:	ethay airway ondintiondfray isway orkingway
+
+source:		the quick brown fox 
+translated:	ethay ucikicay onbray oxfay
+
+source:		deep learning is fun and mysterious 
+translated:	eepway eanringlay isway unfay andway isteromentway
+
+source:		shining like the sun 
+translated:	iningshay ikelay ethay unsay
+
+source:		breaking bad is a good one 
+translated:	eakingbray adbay isway away oodgay oneway
+
+Additive
+
+Small 
+
+source:		the air conditioning is working 
+translated:	ethay airway onditionindgay isway orfingray
+
+source:		the quick brown fox 
+translated:	ethay ickway owndway omfay
+
+source:		deep learning is fun and mysterious 
+translated:	eepray earninggay isway ungsay andway edsteriousway
+
+source:		shining like the sun 
+translated:	iningsray ikeway ethay unsay
+
+source:		breaking bad is a good one 
+translated:	eakingray adway isway away oodgay oneway
+
+Additive
+
+Big 
+sh
+
+
+Transformer
+
+Small 32
+
+source:		the air conditioning is working 
+translated:	etay ay onditny isay orkivy
+
+source:		the quick brown fox 
+translated:	etay icy ownry xay
+
+source:		deep learning is fun and mysterious 
+translated:	epdy erny isay uay ay y
+
+source:		shining like the sun 
+translated:	ingsy ikly etay usy
+
+source:		breaking bad is a good one 
+translated:	ekny ay isay ay odgy onwy
+
+Big 32
+
+source:		the air conditioning is working 
+translated:	ety ary onditininay isy orkinwy
+
+source:		the quick brown fox 
+translated:	ety ickay ownry oxay
+
+source:		deep learning is fun and mysterious 
+translated:	epday earnigly isy uny andy ystroy
+
+source:		shining like the sun 
+translated:	inishy ikly ety uny
+
+source:		breaking bad is a good one 
+translated:	eainby aday isy ay odday ony
+
+Small 64 
+
+source:		the air conditioning is working 
+translated:	ethy aray onditiny isay oray
+
+source:		the quick brown fox 
+translated:	ethy icay ownry oxy
+
+source:		deep learning is fun and mysterious 
+translated:	epay earinlay isay unay andy ysteriosmy
+
+source:		shining like the sun 
+translated:	ininsy iklay ethy unay
+
+source:		breaking bad is a good one 
+translated:	eakingry adbay isay ay oday ony
+
+Big 64 
+source:		the air conditioning is working 
+translated:	ethy ayr onditiny isay orkiy
+
+source:		the quick brown fox 
+translated:	ethy iqay ownbay oxfy
+
+source:		deep learning is fun and mysterious 
+translated:	epay earninyy isay unfay anday ysteriosy
+
+source:		shining like the sun 
+translated:	ininshay ikelay ethy unsay
+
+source:		breaking bad is a good one 
+translated:	ey aday isay aay oday oney
+
+
+
+Non-causal Small 32
+
+source:		the air conditioning is working 
+translated:	eeeott oooooooooooooooooooo oooooooooooooooooooo oooooooooooooooooooo oooooooooooooooooooo
+
+source:		the quick brown fox 
+translated:	eeeott oouuouoooooooooooooo oooooooooooooooooooo oooooooooooooooooooo
+
+source:		deep learning is fun and mysterious 
+translated:	eeee eeeeggggggggggggay oooooooooooooooooooo uououououooooooooooo oooooooooooooooooooo oooooooooooooooooooo
+
+source:		shining like the sun 
+translated:	oooooooooooooooooooo ooeooooooooooooooooo eeeott uououououooooooooooo
+
+source:		breaking bad is a good one 
+translated:	eeeeoooooooooooooooo oooooooooooooooooooo oooooooooooooooooooo oooooooooooooooooooo oooooooooooooooooooo oooooooooooooooooooo
+
+Non-causal big 32
+
+
+source:		the air conditioning is working 
+translated:	eeeeehheeeeeeeeeee ittttttitttiii hhhhh itttiitissstiissssii ttttthtttttttttttttt
+
+source:		the quick brown fox 
+translated:	eeeeehheeeeeeeeeee utttttttttttttttttto ottttttttttttttttttt ottttttttttttttttttt
+
+source:		deep learning is fun and mysterious 
+translated:	eeeeeeeeeeeeeeee eeeeeheeeeeeeeeeee itttiitissstiissssii utttttttututtuuuuttu eeeeeeeeey eeeeeheeey
+
+source:		shining like the sun 
+translated:	itttttttttssti eeeeeehee eeeeehheeeeeeeeeee utttttuuuuuuuuuuuuuu
+
+source:		breaking bad is a good one 
+translated:	ettttheeeeeeeeee  itttiitissstiissssii attttttatttttattttta ooooooooo eeeeeeeeeeeeeeeey
