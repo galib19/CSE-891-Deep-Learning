@@ -98,11 +98,21 @@ class ScaledDotAttention(nn.Module):
         q = self.Q(queries)
         k = self.K(keys)
         v = self.V(values)
+<<<<<<< HEAD
         unnormalized_attention = self.scaling_factor * torch.bmm(k, q.transpose(1, 2))
         attention_weights = self.softmax(unnormalized_attention)
         context = torch.bmm(attention_weights.transpose(1, 2), v)
 
         
+=======
+        unnormalized_attention = k.bmm(q.permute(0, 2, 1)) * self.scaling_factor
+        attention_weights = self.softmax(unnormalized_attention.permute(0, 2, 1))
+        context = torch.bmm(attention_weights, v)
+
+        # unnormalized_attention = self.scaling_factor * torch.bmm(k, q.transpose(1, 2))
+        # attention_weights = self.softmax(unnormalized_attention)
+        # context = torch.bmm(attention_weights.transpose(1, 2), v)
+>>>>>>> 8bb6b935a9f4f8a4fb2e894fee42573a34107e93
 
         # ------------
         # FILL THIS IN - END

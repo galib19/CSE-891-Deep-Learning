@@ -59,7 +59,11 @@ class TransformerEncoder(nn.Module):
         # ------------
         # Add positional embeddings from self.create_positional_encodings. (a'la https://arxiv.org/pdf/1706.03762.pdf, section 3.5)
         encoded = self.embedding(inputs)  # batch_size x seq_len x hidden_size
+<<<<<<< HEAD
         encoded = encoded + self.positional_encodings[:seq_len]
+=======
+        encoded += self.positional_encodings[:seq_len]
+>>>>>>> 8bb6b935a9f4f8a4fb2e894fee42573a34107e93
         # ------------
         # FILL THIS IN - END
         # ------------
@@ -74,7 +78,11 @@ class TransformerEncoder(nn.Module):
             residual_annotations = annotations + new_annotations
             new_annotations = self.attention_mlps[i](residual_annotations.view(-1, self.hidden_size)).view(batch_size, seq_len, self.hidden_size)
             annotations = residual_annotations + new_annotations
+<<<<<<< HEAD
             annotations = self.norm(annotations) #used layer normalization 
+=======
+            annotations = self.norm(annotations)
+>>>>>>> 8bb6b935a9f4f8a4fb2e894fee42573a34107e93
             # ------------
             # FILL THIS IN - END
             # ------------

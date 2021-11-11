@@ -68,6 +68,7 @@ class TransformerDecoder(nn.Module):
           # ------------
           new_contexts, self_attention_weights = self.self_attentions[i](contexts, contexts, contexts)
           residual_contexts = contexts + new_contexts
+<<<<<<< HEAD
           residual_contexts = self.norm(residual_contexts) #used layer normalization
           new_contexts, encoder_attention_weights = self.encoder_attentions[i](residual_contexts, annotations, annotations)
           residual_contexts = residual_contexts + new_contexts
@@ -75,6 +76,15 @@ class TransformerDecoder(nn.Module):
           new_contexts = self.attention_mlps[i](residual_contexts.view(-1, self.hidden_size)).view(batch_size, seq_len, self.hidden_size)
           contexts = residual_contexts + new_contexts
           contexts = self.norm(contexts) #used layer normalization
+=======
+          residual_contexts = self.norm(residual_contexts)
+          new_contexts, encoder_attention_weights = self.encoder_attentions[i](residual_contexts, annotations, annotations)
+          residual_contexts = residual_contexts + new_contexts
+          residual_contexts = self.norm(residual_contexts)
+          new_contexts = self.attention_mlps[i](residual_contexts.view(-1, self.hidden_size)).view(batch_size, seq_len, self.hidden_size)
+          contexts = residual_contexts + new_contexts
+          contexts = self.norm(contexts)
+>>>>>>> 8bb6b935a9f4f8a4fb2e894fee42573a34107e93
           # ------------
           # FILL THIS IN - END
           # ------------
